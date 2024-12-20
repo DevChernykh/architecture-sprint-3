@@ -1,0 +1,28 @@
+@startuml Тёплый дом. Добавить устройство
+
+class AddDiviceController {
+  + HttpResponse index(HttpRequest request)
+}
+
+class AddDiviceUseCase {
+  + void execute(Divice device)
+}
+
+class DiviceCheker {
+  + bool checkSupport(Divice device)
+}
+
+class AddedDiviceNotifier {
+  + void notify(Divice device)
+}
+
+class KafkaFacade {
+  + void push(Message message)
+}
+
+AddDiviceController --> AddDiviceUseCase
+AddDiviceUseCase --> DiviceCheker
+AddDiviceUseCase --> AddedDiviceNotifier
+AddedDiviceNotifier --> KafkaFacade
+
+@enduml

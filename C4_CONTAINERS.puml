@@ -1,0 +1,67 @@
+@startuml Тёплый дом
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+Person(client, "Клиент", "Владелец дома")
+Person(engineer, "Инженер", "Сотрудник компании")
+
+Container_Boundary(organisation, "Тёплый Дом") {
+  Container(web, "WEB-приложение", "JavaScript, React", "Веб-приложение")
+  Container(broker, "Брокер сообщений", "Apache Kafka")
+
+  Container_Boundary(auth, "Аутентификация и авторизация") {
+    Container(auth_service, "Аутентификация и авторизация", "Java", "Введение аккаунтов, управление ролями, аутентификация и авторизация")
+    Container(auth_db, "СУБД", "PostgreSQL", "Хранения данных о пользователях, их доступах")
+  }
+
+  Container_Boundary(devices, "Управление устройствами") {
+    Container(devices_service, "Управление устройствами", "Java", "Вкл/выкл устройств, установка параметров (конфигурция) устройства")
+    Container(devices_db, "СУБД", "PostgreSQL", "Хранения данных о устройствах и их настройках")
+  }
+
+  Container_Boundary(automation, "Автоматизация процессов") {
+    Container(automation_service, "Автоматизация процессов", "Java", "Управление автоматизацией процессов")
+    Container(automation_db, "СУБД", "PostgreSQL", "Хранения данных об автоматизации")
+  }
+
+  Container_Boundary(monitoring, "Мониторинг") {
+    Container(monitoring_service, "Мониторинг", "Java", "Получение текущих данных, составление статистики")
+    Container(monitoring_db, "СУБД", "PostgreSQL", "Хранения данных с устройств")
+    Container(monitoring_search_engine, "Search Engine", "ElasticSearch", "Хранения данных для формирования статистики")
+  }
+
+  Container_Boundary(notification, "Центр уведомлений") {
+    Container(notification_service, "Центр уведомлений", "Java", "Настройка оповещения и отправка уведомлений")
+    Container(notification_db, "СУБД", "PostgreSQL", "Хранения данных настройках оповещений и уведомлений")
+  }
+}
+
+System_Ext(devices, "Различные устройства...", "Датчики температуры, умные розетки, умные лампочки и т.д.")
+
+Rel(client, web, "Взаимодействие с системой", "")
+Rel(engineer, web, "Настройка системы")
+
+Rel(auth_service, auth_db, "")
+Rel(devices_service, devices_db, "")
+Rel(automation_service, automation_db, "")
+Rel(monitoring_service, monitoring_db, "")
+Rel(monitoring_service, monitoring_search_engine, "")
+Rel(notification_service, notification_db, "")
+
+Rel(web, auth_service, "")
+Rel(web, devices_service, "")
+Rel(web, automation_service, "")
+Rel(web, monitoring_service, "")
+Rel(web, monitoring_search_engine, "")
+Rel(web, notification_service, "Настройка уведомолений")
+Rel(notification_service, web, "Отправка уведомлений (push-notification)")
+
+Rel(devices_service, broker, "Сообщить о существующих устройствах")
+Rel(broker, automation_service, "Передача данных о существующих устройствах, которые можно автоматизировать")
+Rel(devices_service, devices, "Управление устройством")
+Rel(automation_service, devices, "Управление устройствами по событию")
+Rel(automation_service, notification_service, "Уведомить о наступлении какого-то события")
+
+Rel(monitoring_service, devices, "Получить текущую информацию об устройствах")
+
+@enduml

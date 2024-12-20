@@ -1,0 +1,45 @@
+@startuml Тёплый дом
+
+entity "Клиент" as Client {
+  id: UUID
+  --
+  surname: string
+  name: string
+  patronymic: string
+  login: string
+  phone: string
+  password: hashed_string
+  created_at: datetime
+}
+
+entity "Дом" as House {
+  id: UUID
+  --
+  address: string
+  owner: UUID
+  active: bool
+}
+
+entity "Устройство" as Device {
+  id: UUID
+  --
+  type: enum
+  active: bool
+  seria: string
+  active: bool
+  houd: UUID
+}
+
+entity "Конфигурация устройства" as DeviceConfig {
+  id: UUID
+  --
+  conf: json
+  current: bool
+  device: UUID
+}
+
+Client }-- House : "У дома может быть несколько пользователей. А один из них владелец"
+House --o{ Device : "К дому можно подключить несколько устройств"
+Device --{ DeviceConfig : "Устройство может иметь несколько конфигураций, между которыми можно переключаться"
+
+@enduml
