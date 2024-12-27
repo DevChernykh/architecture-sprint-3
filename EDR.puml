@@ -16,7 +16,7 @@ entity "Дом" as House {
   id: UUID
   --
   address: string
-  owner: UUID
+  owner_uuid: UUID
   active: bool
 }
 
@@ -27,18 +27,18 @@ entity "Устройство" as Device {
   active: bool
   seria: string
   active: bool
-  houd: UUID
+  house_uuid: UUID
+  active_conf_uuid: UUID
 }
 
 entity "Конфигурация устройства" as DeviceConfig {
   id: UUID
   --
   conf: json
-  current: bool
-  device: UUID
+  device_uuid: UUID
 }
 
-Client }-- House : "У дома может быть несколько пользователей. А один из них владелец"
+Client }--o{ House : "У дома может быть несколько пользователей. А один из них владелец. Пользователь может управлять несколькими домами\nУ клиента не обязательно имеется дом, возможно будет позже, пока просто появился в системе, но не подключил свой дом (или не присоединился к существующему)"
 House --o{ Device : "К дому можно подключить несколько устройств"
 Device --{ DeviceConfig : "Устройство может иметь несколько конфигураций, между которыми можно переключаться"
 

@@ -36,7 +36,7 @@ Container_Boundary(organisation, "Тёплый Дом") {
   }
 }
 
-System_Ext(devices, "Различные устройства...", "Датчики температуры, умные розетки, умные лампочки и т.д.")
+System_Ext(ext_devices, "Различные устройства...", "Датчики температуры, умные розетки, умные лампочки и т.д.")
 
 Rel(client, web, "Взаимодействие с системой", "")
 Rel(engineer, web, "Настройка системы")
@@ -58,10 +58,10 @@ Rel(notification_service, web, "Отправка уведомлений (push-no
 
 Rel(devices_service, broker, "Сообщить о существующих устройствах")
 Rel(broker, automation_service, "Передача данных о существующих устройствах, которые можно автоматизировать")
-Rel(devices_service, devices, "Управление устройством")
-Rel(automation_service, devices, "Управление устройствами по событию")
+Rel(devices_service, ext_devices, "Управление устройством")
+Rel(automation_service, ext_devices, "Управление устройствами по событию")
 Rel(automation_service, notification_service, "Уведомить о наступлении какого-то события")
 
-Rel(monitoring_service, devices, "Получить текущую информацию об устройствах")
+Rel(monitoring_service, ext_devices, "Получить текущую информацию об устройствах")
 
 @enduml
