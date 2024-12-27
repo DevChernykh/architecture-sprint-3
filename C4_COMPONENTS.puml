@@ -1,0 +1,45 @@
+@startuml Тёплый дом
+!include <C4/C4_Container>
+!include <C4/C4_Component>
+
+Container_Boundary(auth, "Аутентификация и авторизация") {
+  Container(auth_service, "Аутентификация и авторизация", "Java", "Введение аккаунтов, управление ролями, аутентификация и авторизация") {
+    Component(auth_api, "API", "")
+    Component(auth_manager, "Проверка договора клиента", "", "(как пример) При истечении срока договора, запрещает доступ к системе")
+  }
+}
+
+Container_Boundary(devices, "Управление устройствами") {
+  Container(devices_service, "Управление устройствами", "Java", "Вкл/выкл устройств, установка параметров (конфигурция) устройства")) {
+    Component(devices_api, "API", "")
+    Component(devices_helthcheck, "Проверка доступности устройства", "")
+    Component(devices_sync, "Сихронизация on/off", "", "Синхронизация on/off с физическим устройством")
+    Component(devices_handler, "Обработка команд", "", "Отправка команд и настроек на устройство")
+    Component(devices_noify, "Уведомить о сущестовании устройств", "", "Сообщить другим сервисам, что появилось новое устройство или наоборот, что какое-то не доступно больше")
+  }
+}
+
+Container_Boundary(automation, "Автоматизация процессов") {
+  Container(automation_service, "Автоматизация процессов", "Java", "Управление автоматизацией процессов") {
+    Component(automation_service_api, "API", "")
+    Component(automation_service_cron, "Отправка комманд по событию", "")
+    Component(automation_service_sync, "Синхронизация доступных устройств", "")
+  }
+}
+
+Container_Boundary(monitoring, "Мониторинг") {
+  Container(monitoring_service, "Мониторинг", "Java", "Получение текущих данных, составление статистики") {
+    Component(monitoring_api, "API", "")
+    Component(monitoring_check, "Получение значений с устройств", "")
+    Component(monitoring_statistic, "Формирование статистики в search engine", "", "Отправка в поисковый движок статистики по устройствам, например: изменение температуры за период")
+  }
+}
+
+Container_Boundary(notification, "Центр уведомлений") {
+  Container(notification_service, "Центр уведомлений", "Java", "Настройка оповещения и отправка уведомлений") {
+    Component(notification_api, "API", "", "Настройка уведомлений")
+    Component(notification_handler, "Отправка уведомлений", "")
+  }
+}
+
+@enduml

@@ -1,0 +1,21 @@
+@startuml Тёплый дом
+!include <C4/C4_Container>
+
+Person(client, "Клиент", "Владелец дома")
+Person(engineer, "Инженер", "Сотрудник компании")
+
+System_Boundary(c1, "Монолит Тёплый дом") {
+    Container(monolith, "Монолит", "Java, Postgres", "Управление реле и мониториг температуры")
+}
+
+System(device, "Реле")
+System(sensor, "Датчик температуры")
+
+
+Rel(client, monolith, "Вкл/выкл отопление, задать нужную температуру", "HTTPS")
+Rel(client, monolith, "Получить значение текущей температуры", "HTTPS")
+Rel(engineer, monolith, "Добавить новой устройство", "HTTPS")
+Rel(monolith, device, "Вкл/выкл устройства, настройка поддерживаемой тепературы", "HTTPS")
+Rel(monolith, device, "Подключить/отключить устройство", "HTTPS")
+Rel(monolith, sensor, "Получение данных с датчика", "HTTPS")
+@enduml
